@@ -24,14 +24,27 @@
       ></icon-button>
     </div>
     <div :class="`${prefixClass}-calendar-content`">
-      <table :class="`${prefixClass}-table ${prefixClass}-table-month`" @click="handleClick">
+      <table
+        :class="`${prefixClass}-table ${prefixClass}-table-month`"
+        @click="handleClick"
+        @keydown.enter="handleClick"
+      >
         <tr v-for="(row, i) in months" :key="i">
           <td
             v-for="(cell, j) in row"
             :key="j"
-            :data-month="cell.month"
+            :ref="handleRefName(cell, i, j)"
             class="cell"
+            role="button"
+            :disabled="isDisabled(cell)"
+            :tabindex="handleTabIndex(cell)"
+            :data-month="cell.month"
             :class="getCellClasses(cell.month)"
+            @keydown.tab.prevent.stop
+            @keydown.up.prevent="handleArrowUp(cell, i, j)"
+            @keydown.down.prevent="handleArrowDown(cell, i, j)"
+            @keydown.left.prevent="handleArrowLeft(cell, i, j)"
+            @keydown.right.prevent="handleArrowRight(cell, i, j)"
           >
             <div>{{ cell.text }}</div>
           </td>
@@ -45,7 +58,7 @@
 import { chunk } from '../util/base';
 import IconButton from './icon-button';
 import { getLocale } from '../locale';
-import { setYear } from '../util/date';
+import { createDate, setYear } from '../util/date';
 
 export default {
   name: 'TableMonth',
@@ -71,13 +84,17 @@ export default {
       type: Function,
       default: () => [],
     },
+    isDisabled: {
+      type: Function,
+      default: () => false,
+    },
   },
   computed: {
     calendarYear() {
       return this.calendar.getFullYear();
     },
     months() {
-      const locale = this.getLocale();
+      const { locale } = this;
       const monthsLocale = locale.months || locale.formatLocale.monthsShort;
       const months = monthsLocale.map((text, month) => {
         return { text, month };
@@ -86,6 +103,12 @@ export default {
     },
     locale() {
       return this.getLocale();
+    },
+    refsArray() {
+      if (this.$refs) {
+        return Object.entries(this.$refs);
+      }
+      return [];
     },
   },
   methods: {
@@ -103,6 +126,66 @@ export default {
           break;
       }
       return this.disabledCalendarChanger(date, type);
+    },
+    handleArrowUp(cell, row, column) {
+      if (row === 0) {
+        return;
+      }
+      const refName = this.handleRefName(cell, row - 1, column);
+      const ref = this.$refs[refName]?.[0];
+      if (ref) {
+        ref.focus();
+      }
+    },
+    handleArrowDown(cell, row, column) {
+      if (row === this.months.length - 1) {
+        return;
+      }
+      const refName = this.handleRefName(cell, row + 1, column);
+      const ref = this.$refs[refName]?.[0];
+      if (ref) {
+        ref.focus();
+      }
+    },
+    handleArrowLeft(cell, row, column) {
+      const currentRefName = this.handleRefName(cell, row, column);
+      const firstRef = this.refsArray[0];
+      if (currentRefName !== firstRef[0]) {
+        const refName = this.handleRefName(cell, row, column - 1);
+        const ref = this.$refs[refName]?.[0];
+        if (ref) {
+          ref.focus();
+        }
+      } else {
+        this.handleIconDoubleLeftClick();
+        const lastRef = this.refsArray[this.refsArray.length - 1];
+        if (lastRef.length) {
+          const element = lastRef[1];
+          if (element.length) {
+            element[0].focus();
+          }
+        }
+      }
+    },
+    handleArrowRight(cell, row, column) {
+      const currentRefName = this.handleRefName(cell, row, column);
+      const lastRef = this.refsArray[this.refsArray.length - 1];
+      if (currentRefName !== lastRef[0]) {
+        const refName = this.handleRefName(cell, row, column + 1);
+        const ref = this.$refs[refName]?.[0];
+        if (ref) {
+          ref.focus();
+        }
+      } else {
+        this.handleIconDoubleRightClick();
+        const firstRef = this.refsArray[0];
+        if (firstRef.length) {
+          const element = firstRef[1];
+          if (element.length) {
+            element[0].focus();
+          }
+        }
+      }
     },
     handleIconDoubleLeftClick() {
       this.$emit(
@@ -130,6 +213,17 @@ export default {
       if (month && !target.classList.contains('disabled')) {
         this.$emit('select', parseInt(month, 10));
       }
+    },
+    handleRefName(cellDate, row, col) {
+      const date = createDate(cellDate, 0);
+      if (!this.isDisabled(date)) {
+        return `year-cell-${row}-${col}`;
+      }
+      return undefined;
+    },
+    handleTabIndex(cellDate) {
+      const date = createDate(cellDate, 0);
+      return this.isDisabled(date) ? -1 : 0;
     },
   },
 };
