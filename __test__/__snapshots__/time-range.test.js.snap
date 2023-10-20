@@ -31,6 +31,7 @@ exports[`TimeRange render: correct classes of the columns 1`] = `
               <li
                 class="mx-time-item"
                 data-index="0"
+                tabindex="0"
               >
                 
         12
@@ -39,6 +40,7 @@ exports[`TimeRange render: correct classes of the columns 1`] = `
               <li
                 class="mx-time-item"
                 data-index="1"
+                tabindex="0"
               >
                 
         02
@@ -47,6 +49,7 @@ exports[`TimeRange render: correct classes of the columns 1`] = `
               <li
                 class="mx-time-item"
                 data-index="2"
+                tabindex="0"
               >
                 
         04
@@ -55,6 +58,7 @@ exports[`TimeRange render: correct classes of the columns 1`] = `
               <li
                 class="mx-time-item"
                 data-index="3"
+                tabindex="0"
               >
                 
         06
@@ -63,6 +67,7 @@ exports[`TimeRange render: correct classes of the columns 1`] = `
               <li
                 class="mx-time-item active"
                 data-index="4"
+                tabindex="0"
               >
                 
         08
@@ -71,6 +76,7 @@ exports[`TimeRange render: correct classes of the columns 1`] = `
               <li
                 class="mx-time-item"
                 data-index="5"
+                tabindex="0"
               >
                 
         10
@@ -103,6 +109,7 @@ exports[`TimeRange render: correct classes of the columns 1`] = `
               <li
                 class="mx-time-item"
                 data-index="0"
+                tabindex="0"
               >
                 
         00
@@ -111,6 +118,7 @@ exports[`TimeRange render: correct classes of the columns 1`] = `
               <li
                 class="mx-time-item active"
                 data-index="1"
+                tabindex="0"
               >
                 
         30
@@ -143,6 +151,7 @@ exports[`TimeRange render: correct classes of the columns 1`] = `
               <li
                 class="mx-time-item active"
                 data-index="0"
+                tabindex="0"
               >
                 
         AM
@@ -151,6 +160,7 @@ exports[`TimeRange render: correct classes of the columns 1`] = `
               <li
                 class="mx-time-item"
                 data-index="1"
+                tabindex="0"
               >
                 
         PM
@@ -197,6 +207,7 @@ exports[`TimeRange render: correct classes of the columns 1`] = `
               <li
                 class="mx-time-item"
                 data-index="0"
+                tabindex="0"
               >
                 
         12
@@ -205,6 +216,7 @@ exports[`TimeRange render: correct classes of the columns 1`] = `
               <li
                 class="mx-time-item"
                 data-index="1"
+                tabindex="0"
               >
                 
         02
@@ -213,6 +225,7 @@ exports[`TimeRange render: correct classes of the columns 1`] = `
               <li
                 class="mx-time-item"
                 data-index="2"
+                tabindex="0"
               >
                 
         04
@@ -221,6 +234,7 @@ exports[`TimeRange render: correct classes of the columns 1`] = `
               <li
                 class="mx-time-item active"
                 data-index="3"
+                tabindex="0"
               >
                 
         06
@@ -229,6 +243,7 @@ exports[`TimeRange render: correct classes of the columns 1`] = `
               <li
                 class="mx-time-item"
                 data-index="4"
+                tabindex="0"
               >
                 
         08
@@ -237,6 +252,7 @@ exports[`TimeRange render: correct classes of the columns 1`] = `
               <li
                 class="mx-time-item"
                 data-index="5"
+                tabindex="0"
               >
                 
         10
@@ -269,6 +285,7 @@ exports[`TimeRange render: correct classes of the columns 1`] = `
               <li
                 class="mx-time-item"
                 data-index="0"
+                tabindex="0"
               >
                 
         00
@@ -277,6 +294,7 @@ exports[`TimeRange render: correct classes of the columns 1`] = `
               <li
                 class="mx-time-item active"
                 data-index="1"
+                tabindex="0"
               >
                 
         30
@@ -309,6 +327,7 @@ exports[`TimeRange render: correct classes of the columns 1`] = `
               <li
                 class="mx-time-item"
                 data-index="0"
+                tabindex="0"
               >
                 
         AM
@@ -317,6 +336,7 @@ exports[`TimeRange render: correct classes of the columns 1`] = `
               <li
                 class="mx-time-item active"
                 data-index="1"
+                tabindex="0"
               >
                 
         PM

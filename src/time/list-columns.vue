@@ -186,18 +186,18 @@ export default {
       if (col <= 0) {
         return;
       }
-      const ref = this.$refs[`item-${col - 1}-${row}`]?.[0];
-      if (ref) {
-        ref.focus();
+      const ref = this.$refs[`item-${col - 1}-${row}`];
+      if (ref && ref.length > 0) {
+        ref[0].focus();
       }
     },
     handleArrowRight(col, row) {
       if (col >= 2) {
         return;
       }
-      const ref = this.$refs[`item-${col + 1}-${row}`]?.[0];
-      if (ref) {
-        ref.focus();
+      const ref = this.$refs[`item-${col + 1}-${row}`];
+      if (ref && ref.length > 0) {
+        ref[0].focus();
       }
     },
     scrollToSelected(duration) {

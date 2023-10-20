@@ -8,20 +8,12 @@ exports[`TableYear decade=2010 1`] = `
     class="mx-calendar-header"
   >
     <button
+      aria-label="Previous Page"
       class="mx-btn mx-btn-text mx-btn-icon-double-left"
       type="button"
     >
       <i
         class="mx-icon-double-left"
-      />
-    </button>
-     
-    <button
-      class="mx-btn mx-btn-text mx-btn-icon-double-right"
-      type="button"
-    >
-      <i
-        class="mx-icon-double-right"
       />
     </button>
      
@@ -40,6 +32,16 @@ exports[`TableYear decade=2010 1`] = `
         2019
       </span>
     </span>
+     
+    <button
+      aria-label="Next Page"
+      class="mx-btn mx-btn-text mx-btn-icon-double-right"
+      type="button"
+    >
+      <i
+        class="mx-icon-double-right"
+      />
+    </button>
   </div>
    
   <div

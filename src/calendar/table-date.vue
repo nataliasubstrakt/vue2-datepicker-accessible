@@ -223,9 +223,9 @@ export default {
         return;
       }
       const refName = this.handleRefName(cell, row - 1, column);
-      const ref = this.$refs[refName]?.[0];
-      if (ref) {
-        ref.focus();
+      const ref = this.$refs[refName];
+      if (ref && ref.length > 0) {
+        ref[0].focus();
       }
     },
     handleArrowDown(cell, row, column) {
@@ -233,9 +233,9 @@ export default {
         return;
       }
       const refName = this.handleRefName(cell, row + 1, column);
-      const ref = this.$refs[refName]?.[0];
-      if (ref) {
-        ref.focus();
+      const ref = this.$refs[refName];
+      if (ref && ref.length > 0) {
+        ref[0].focus();
       }
     },
     handleArrowLeft(cell, row, column) {
@@ -243,9 +243,9 @@ export default {
       const firstRef = this.refsArray[0];
       if (currentRefName !== firstRef[0]) {
         const refName = this.handleRefName(cell, row, column - 1);
-        const ref = this.$refs[refName]?.[0];
-        if (ref) {
-          ref.focus();
+        const ref = this.$refs[refName];
+        if (ref && ref.length > 0) {
+          ref[0].focus();
         }
       } else if (this.range) {
         let index = 0;
@@ -278,9 +278,9 @@ export default {
       const lastRef = this.refsArray[this.refsArray.length - 1];
       if (currentRefName !== lastRef[0]) {
         const refName = this.handleRefName(cell, row, column + 1);
-        const ref = this.$refs[refName]?.[0];
-        if (ref) {
-          ref.focus();
+        const ref = this.$refs[refName];
+        if (ref && ref.length > 0) {
+          ref[0].focus();
         }
       } else if (this.range) {
         let index = 0;
