@@ -1,14 +1,14 @@
 # vue2-datepicker
 
-[中文版](https://github.com/mengxiong10/vue2-datepicker/blob/master/README.zh-CN.md)
+[中文版](https://github.com/iknox27/vue2-datepicker/blob/master/README.zh-CN.md)
 
-> A Datepicker Component For Vue2
+> A Datepicker Component For Vue2 with a11y 
 
-<a href="https://travis-ci.org/mengxiong10/vue2-datepicker">
-  <img src="https://travis-ci.org/mengxiong10/vue2-datepicker.svg?branch=master" alt="build:passed">
+<a href="https://travis-ci.org/iknox27/vue2-datepicker">
+  <img src="https://travis-ci.org/iknox27/vue2-datepicker.svg?branch=master" alt="build:passed">
 </a>
-<a href="https://coveralls.io/github/mengxiong10/vue2-datepicker">
-  <img src="https://coveralls.io/repos/github/mengxiong10/vue2-datepicker/badge.svg?branch=master&service=github" alt="Badge">
+<a href="https://coveralls.io/github/iknox27/vue2-datepicker">
+  <img src="https://coveralls.io/repos/github/iknox27/vue2-datepicker/badge.svg?branch=master&service=github" alt="Badge">
 </a>
 <a href="https://www.npmjs.com/package/vue2-datepicker">
   <img src="https://img.shields.io/npm/v/vue2-datepicker.svg" alt="npm">
@@ -17,13 +17,13 @@
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT">
 </a>
 
-**For Vue 3.0, you can use [vue-datepicker-next](https://github.com/mengxiong10/vue-datepicker-next) from the same author**
+**For Vue 3.0, you can use [vue-datepicker-next](https://github.com/iknox27/vue-datepicker-next) from the same author**
 
 ## Demo
 
-<https://mengxiong10.github.io/vue2-datepicker/index.html>
+<https://iknox27.github.io/vue2-datepicker/index.html>
 
-![image](https://github.com/mengxiong10/vue2-datepicker/raw/master/screenshot/demo.png)
+![image](https://github.com/iknox27/vue2-datepicker/raw/master/screenshot/demo.png)
 
 ## Install
 
@@ -88,7 +88,7 @@ import 'vue2-datepicker/locale/zh-cn';
 ```
 
 You can also override some of the default locale by `lang`.
-[Full config](https://github.com/mengxiong10/vue2-datepicker/blob/master/locale.md)
+[Full config](https://github.com/iknox27/vue2-datepicker/blob/master/locale.md)
 
 ```html
 <script>
@@ -290,7 +290,7 @@ Set fixed time list to select;
 | input-error     | When user type a invalid Date                                                      | the input text                                                                                                           |
 | focus           | When input focus                                                                   |                                                                                                                          |
 | blur            | When input blur                                                                    |                                                                                                                          |
-| pick            | when select date [#429](https://github.com/mengxiong10/vue2-datepicker/issues/429) | date                                                                                                                     |
+| pick            | when select date [#429](https://github.com/iknox27/vue2-datepicker/issues/429) | date                                                                                                                     |
 | calendar-change | when change the calendar                                                           | date, oldDate, type('year'\|'month'\|'last-year'\|'next-year'\|'last-month'\|'next-month'\|'last-decade'\|'next-decade') |
 | panel-change    | when the calendar panel changes                                                    | type('year'\|'month'\|'date'), oldType                                                                                   |
 
@@ -319,6 +319,6 @@ If you find this project useful, you can buy me a coffee
 
 ## License
 
-[MIT](https://github.com/mengxiong10/vue2-datepicker/blob/master/LICENSE)
+[MIT](https://github.com/iknox27/vue2-datepicker/blob/master/LICENSE)
 
 Copyright (c) 2017-present xiemengxiong
