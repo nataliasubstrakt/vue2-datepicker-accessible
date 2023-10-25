@@ -230,6 +230,16 @@ export default {
     },
     handleArrowDown(cell, row, column) {
       if (row === this.dates.length - 1) {
+        const footer = document.querySelector(`.${this.prefixClass}-datepicker-footer`);
+        if (footer) {
+          const elements = footer.querySelectorAll('button, [href], input, select, textarea');
+          const firstElement = Array.from(elements).find(
+            el => !el.disabled && !el.hidden && el.tabIndex !== -1
+          );
+          if (firstElement) {
+            firstElement.focus();
+          }
+        }
         return;
       }
       const refName = this.handleRefName(cell, row + 1, column);

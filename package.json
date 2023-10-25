@@ -1,5 +1,5 @@
 {
-  "name": "vue2-datepicker-a11y",
+  "name": "vue2-a11y-datepicker",
   "description": "A Datepicker Component For Vue2 with a11y",
   "main": "index.js",
   "module": "index.esm.js",
@@ -11,7 +11,7 @@
     "/index.*",
     "/scss"
   ],
-  "version": "3.11.5",
+  "version": "3.11.7",
   "scripts": {
     "dev": "parcel ./example/dev.html --open --port 2235",
     "build:index": "cross-env NODE_ENV=production rollup -c",
