@@ -1,12 +1,9 @@
 # vue2-datepicker
 
-[中文版](https://github.com/iknox27/vue2-datepicker/blob/master/README.zh-CN.md)
+### This is a fork form the great repo https://github.com/mengxiong10/vue2-datepicker, fixing some issues on a11y. 
 
 > A Datepicker Component For Vue2 with a11y 
 
-<a href="https://travis-ci.org/iknox27/vue2-datepicker">
-  <img src="https://travis-ci.org/iknox27/vue2-datepicker.svg?branch=master" alt="build:passed">
-</a>
 <a href="https://coveralls.io/github/iknox27/vue2-datepicker">
   <img src="https://coveralls.io/repos/github/iknox27/vue2-datepicker/badge.svg?branch=master&service=github" alt="Badge">
 </a>
@@ -17,7 +14,6 @@
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT">
 </a>
 
-**For Vue 3.0, you can use [vue-datepicker-next](https://github.com/iknox27/vue-datepicker-next) from the same author**
 
 ## Demo
 
@@ -28,15 +24,15 @@
 ## Install
 
 ```bash
-$ npm install vue2-datepicker --save
+$ npm install vue2-a11y-datepicker --save
 ```
 
 ## Usage
 
 ```html
 <script>
-  import DatePicker from 'vue2-datepicker';
-  import 'vue2-datepicker/index.css';
+  import DatePicker from 'vue2-a11y-datepicker';
+  import 'vue2-a11y-datepicker/index.css';
 
   export default {
     components: { DatePicker },
@@ -71,7 +67,7 @@ $namespace: 'xmx'; // change the 'mx' to 'xmx'. then <date-picker prefix-class="
 $default-color: #555;
 $primary-color: #1284e7;
 
-@import '~vue2-datepicker/scss/index.scss';
+@import '~vue2-a11y-datepicker/scss/index.scss';
 ```
 
 ## Internationalization
@@ -82,9 +78,9 @@ Once you import a locale, it becomes the active locale.
 
 ```js
 import DatePicker from 'vue2-datepicker';
-import 'vue2-datepicker/index.css';
+import 'vue2-a11y-datepicker/index.css';
 
-import 'vue2-datepicker/locale/zh-cn';
+import 'vue2-a11y-datepicker/locale/zh-cn';
 ```
 
 You can also override some of the default locale by `lang`.
@@ -305,17 +301,6 @@ Set fixed time list to select;
 | footer        | popup footer             |
 | sidebar       | popup sidebar            |
 
-## ChangeLog
-
-[CHANGELOG](CHANGELOG.md)
-
-## One-time Donations
-
-If you find this project useful, you can buy me a coffee
-
-[Paypal Me](https://www.paypal.me/mengxiong10)
-
-![donate](https://user-images.githubusercontent.com/14135808/83999111-a7947600-a994-11ea-84e9-9a215def4155.png)
 
 ## License
 
