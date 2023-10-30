@@ -192,7 +192,7 @@ export default {
       }
     },
     handleArrowRight(col, row) {
-      if (col >= 2) {
+      if (col >= this.columns.length - 1) {
         return;
       }
       const ref = this.$refs[`item-${col + 1}-${row}`];
