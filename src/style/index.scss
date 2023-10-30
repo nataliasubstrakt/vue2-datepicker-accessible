@@ -195,6 +195,10 @@
     &.active {
       color: $calendar-active-color;
       background-color: $calendar-active-background-color;
+
+      &:focus-visible{
+        outline-offset: 3px;
+      }
     }
     &.in-range,
     &.hover-in-range {
@@ -205,9 +209,6 @@
       cursor: not-allowed;
       color: $disabled-color;
       background-color: $disabled-background-color;
-    }
-    &.focus {
-      outline: -webkit-focus-ring-color auto 1px;
     }
   }
 }

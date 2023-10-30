@@ -1,9 +1,11 @@
 <template>
-  <scrollbar-vertical>
+  <scrollbar-vertical role="menu">
     <div
       v-for="item in list"
       :key="item.value"
+      role="menuitem"
       :tabindex="isDisabled(item.value) ? '-1' : '0'"
+      :disabled="isDisabled(item.value)"
       :class="[`${prefixClass}-time-option`, getClasses(item.value)]"
       @click="handleSelect(item.value)"
       @keydown.enter="handleSelect(item.value)"

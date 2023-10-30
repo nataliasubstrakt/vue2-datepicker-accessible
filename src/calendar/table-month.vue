@@ -40,11 +40,11 @@
             :tabindex="handleTabIndex(cell)"
             :data-month="cell.month"
             :class="getCellClasses(cell.month)"
-            @keydown.tab.prevent.stop
-            @keydown.up.prevent="handleArrowUp(cell, i, j)"
             @keydown.down.prevent="handleArrowDown(cell, i, j)"
             @keydown.left.prevent="handleArrowLeft(cell, i, j)"
             @keydown.right.prevent="handleArrowRight(cell, i, j)"
+            @keydown.tab.prevent.stop
+            @keydown.up.prevent="handleArrowUp(cell, i, j)"
           >
             <div>{{ cell.text }}</div>
           </td>
@@ -94,13 +94,16 @@ export default {
       return this.calendar.getFullYear();
     },
     months() {
-      const { locale } = this;
+      const locale = this.getLocale();
       const monthsLocale = locale.months || locale.formatLocale.monthsShort;
       const months = monthsLocale.map((text, month) => {
         return { text, month };
       });
       return chunk(months, 3);
     },
+    /*
+      Add locale to be used on the template
+    */
     locale() {
       return this.getLocale();
     },
@@ -127,18 +130,19 @@ export default {
       }
       return this.disabledCalendarChanger(date, type);
     },
+    /* 
+      Allow the user to navigate with arrow up on the keydown event
+    */
     handleArrowUp(cell, row, column) {
-      if (row === 0) {
-        return;
-      }
-      const refName = this.handleRefName(cell, row - 1, column);
-      const ref = this.$refs[refName];
-      if (ref && ref.length > 0) {
-        ref[0].focus();
+      if (row > 0) {
+        this.focusNextElement(cell, row - 1, column);
       }
     },
+    /* 
+      Allow the user to navigate with arrow down on the keydown event
+    */
     handleArrowDown(cell, row, column) {
-      if (row === this.months.length - 1) {
+      if (row >= this.months.length - 1) {
         const footer = document.querySelector(`.${this.prefixClass}-datepicker-footer`);
         if (footer) {
           const elements = footer.querySelectorAll('button, [href], input, select, textarea');
@@ -149,23 +153,18 @@ export default {
             firstElement.focus();
           }
         }
-        return;
-      }
-      const refName = this.handleRefName(cell, row + 1, column);
-      const ref = this.$refs[refName];
-      if (ref && ref.length > 0) {
-        ref[0].focus();
+      } else {
+        this.focusNextElement(cell, row + 1, column);
       }
     },
+    /* 
+      Allow the user to navigate with arrow left on the keydown event
+    */
     handleArrowLeft(cell, row, column) {
       const currentRefName = this.handleRefName(cell, row, column);
       const firstRef = this.refsArray[0];
       if (currentRefName !== firstRef[0]) {
-        const refName = this.handleRefName(cell, row, column - 1);
-        const ref = this.$refs[refName];
-        if (ref && ref.length > 0) {
-          ref[0].focus();
-        }
+        this.focusNextElement(cell, row, column - 1);
       } else {
         this.handleIconDoubleLeftClick();
         const lastRef = this.refsArray[this.refsArray.length - 1];
@@ -177,15 +176,14 @@ export default {
         }
       }
     },
+    /* 
+      Allow the user to navigate with arrow right on the keydown event
+    */
     handleArrowRight(cell, row, column) {
       const currentRefName = this.handleRefName(cell, row, column);
       const lastRef = this.refsArray[this.refsArray.length - 1];
       if (currentRefName !== lastRef[0]) {
-        const refName = this.handleRefName(cell, row, column + 1);
-        const ref = this.$refs[refName];
-        if (ref && ref.length > 0) {
-          ref[0].focus();
-        }
+        this.focusNextElement(cell, row, column + 1);
       } else {
         this.handleIconDoubleRightClick();
         const firstRef = this.refsArray[0];
@@ -227,13 +225,20 @@ export default {
     handleRefName(cellDate, row, col) {
       const date = createDate(cellDate, 0);
       if (!this.isDisabled(date)) {
-        return `year-cell-${row}-${col}`;
+        return `month-cell-${row}-${col}`;
       }
       return undefined;
     },
     handleTabIndex(cellDate) {
       const date = createDate(cellDate, 0);
       return this.isDisabled(date) ? -1 : 0;
+    },
+    focusNextElement(cell, row, column) {
+      const refName = this.handleRefName(cell, row, column);
+      const ref = this.$refs[refName];
+      if (ref && ref.length > 0) {
+        ref[0].focus();
+      }
     },
   },
 };
