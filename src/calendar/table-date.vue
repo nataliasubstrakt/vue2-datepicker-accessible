@@ -1,5 +1,8 @@
 <template>
-  <div :class="`${prefixClass}-calendar ${prefixClass}-calendar-panel-date`">
+  <div
+    :class="`${prefixClass}-calendar ${prefixClass}-calendar-panel-date`"
+    @keydown.esc="handleEsc"
+  >
     <div :class="`${prefixClass}-calendar-header`">
       <icon-button
         type="double-left"
@@ -18,9 +21,7 @@
           v-for="item in yearMonth"
           :key="item.panel"
           type="button"
-          :class="
-            `${prefixClass}-btn ${prefixClass}-btn-text ${prefixClass}-btn-current-${item.panel}`
-          "
+          :class="`${prefixClass}-btn ${prefixClass}-btn-text ${prefixClass}-btn-current-${item.panel}`"
           @click="handlePanelChange(item.panel)"
         >
           {{ item.label }}
@@ -74,11 +75,12 @@
               :title="getCellTitle(cell)"
               @mouseenter="handleMouseEnter(cell)"
               @mouseleave="handleMouseLeave(cell)"
+              @keydown.up.prevent="handleArrowUp(cell, i, j)"
               @keydown.down.prevent="handleArrowDown(cell, i, j)"
               @keydown.left.prevent="handleArrowLeft(cell, i, j)"
               @keydown.right.prevent="handleArrowRight(cell, i, j)"
-              @keydown.tab.prevent.stop
-              @keydown.up.prevent="handleArrowUp(cell, i, j)"
+              @keydown.tab="handleTab(cell, i, j)"
+              @keydown.enter="handleEnter"
             >
               <div>{{ cell.getDate() }}</div>
             </td>
@@ -91,7 +93,7 @@
 
 <script>
 import { getWeek, format } from 'date-format-parse';
-import IconButton from './icon-button';
+import IconButton from './icon-button.vue';
 import { chunk } from '../util/base';
 import { getCalendar, setMonth, setYear } from '../util/date';
 import { getLocale } from '../locale';
@@ -185,9 +187,6 @@ export default {
       });
       return chunk(arr, 7);
     },
-    /*
-      Add locale to be used on the template
-    */
     locale() {
       return this.getLocale();
     },
@@ -221,104 +220,113 @@ export default {
       }
       return this.disabledCalendarChanger(date, type);
     },
-    /* 
-      Allow the user to navigate with arrow up on the keydown event
-    */
-    handleArrowUp(cell, row, column) {
-      if (row > 0) {
-        this.focusNextElement(cell, row - 1, column);
+    handleTab(cell, row, column) {
+      const currentRefName = this.handleRefName(cell, row, column);
+      const lastRef = this.refsArray[this.refsArray.length - 1];
+
+      if (currentRefName === lastRef[0]) {
+        this.$emit('tableclose');
       }
     },
-    /* 
-      Allow the user to navigate with arrow down on the keydown event
-    */
+    handleEnter(evt) {
+      this.handleCellClick(evt);
+    },
+    handleEsc() {
+      this.$emit('tableclose');
+    },
+    handleArrowUp(cell, row, column) {
+      if (row === 0) {
+        return;
+      }
+      const refName = this.handleRefName(cell, row - 1, column);
+      const ref = this.$refs[refName]?.[0];
+      if (ref) {
+        ref.focus();
+      }
+    },
     handleArrowDown(cell, row, column) {
       if (row === this.dates.length - 1) {
-        const footer = document.querySelector(`.${this.prefixClass}-datepicker-footer`);
-        if (footer) {
-          const elements = footer.querySelectorAll('button, [href], input, select, textarea');
-          const firstElement = Array.from(elements).find(
-            el => !el.disabled && !el.hidden && el.tabIndex !== -1
-          );
-          if (firstElement) {
-            firstElement.focus();
-          }
-        }
-      } else {
-        this.focusNextElement(cell, row + 1, column);
+        return;
+      }
+      const refName = this.handleRefName(cell, row + 1, column);
+      const ref = this.$refs[refName]?.[0];
+      if (ref) {
+        ref.focus();
       }
     },
-    /* 
-      Allow the user to navigate with arrow left on the keydown event
-    */
     handleArrowLeft(cell, row, column) {
       const currentRefName = this.handleRefName(cell, row, column);
       const firstRef = this.refsArray[0];
-      if (currentRefName === firstRef[0]) {
-        if (this.range) {
-          this.handleLeftNextRange();
-        } else {
-          this.handleIconLeftClick();
-          const lastRef = this.refsArray[this.refsArray.length - 1];
-          if (lastRef.length) {
-            const element = lastRef[1];
-            if (element.length) {
-              element[0].focus();
-            }
-          }
+      if (currentRefName !== firstRef[0]) {
+        const refName = this.handleRefName(cell, row, column - 1);
+        const ref = this.$refs[refName]?.[0];
+        if (ref) {
+          ref.focus();
         }
-      } else {
-        this.focusNextElement(cell, row, column - 1);
+      } else if (this.range) {
+        let index = 0;
+        if (this.rangeIndex === 0) {
+          this.handleIconLeftClick();
+        } else {
+          index = this.rangeIndex - 1;
+        }
+        const lastRow = this.dates[this.dates.length - 1];
+        const cellName = `#range-date-${index}-cell-${this.dates.length - 1}-${lastRow.length - 1}`;
+        const cellElement = document.querySelector(cellName);
+        if (cellElement) {
+          cellElement.focus();
+        }
       }
     },
-    /* 
-      Allow the user to navigate with arrow right on the keydown event
-    */
     handleArrowRight(cell, row, column) {
       const currentRefName = this.handleRefName(cell, row, column);
       const lastRef = this.refsArray[this.refsArray.length - 1];
-      if (currentRefName === lastRef[0]) {
-        if (this.range) {
-          this.handleRightNextRange();
-        } else {
-          this.handleIconRightClick();
-          const firstRef = this.refsArray[0];
-          if (firstRef.length) {
-            const element = firstRef[1];
-            if (element.length) {
-              element[0].focus();
-            }
-          }
+      if (currentRefName !== lastRef[0]) {
+        const refName = this.handleRefName(cell, row, column + 1);
+        const ref = this.$refs[refName]?.[0];
+        if (ref) {
+          ref.focus();
         }
-      } else {
-        this.focusNextElement(cell, row, column + 1);
+      } else if (this.range) {
+        let index = 0;
+        if (this.rangeIndex === 0) {
+          index = this.rangeIndex + 1;
+        } else {
+          index = this.rangeIndex - 1;
+          this.handleIconRightClick();
+        }
+        const cellName = `#range-date-${index}-cell-0-0`;
+        const cellElement = document.querySelector(cellName);
+        if (cellElement) {
+          cellElement.focus();
+        }
       }
     },
     handleIconLeftClick() {
       this.$emit(
         'changecalendar',
-        setMonth(this.calendar, v => v - 1),
+        setMonth(this.calendar, (v) => v - 1),
         'last-month'
       );
     },
     handleIconRightClick() {
       this.$emit(
         'changecalendar',
-        setMonth(this.calendar, v => v + 1),
+        setMonth(this.calendar, (v) => v + 1),
         'next-month'
       );
     },
     handleIconDoubleLeftClick() {
       this.$emit(
         'changecalendar',
-        setYear(this.calendar, v => v - 1),
+        setYear(this.calendar, (v) => v - 1),
         'last-year'
       );
     },
     handleIconDoubleRightClick() {
       this.$emit(
         'changecalendar',
-        setYear(this.calendar, v => v + 1),
+        setYear(this.calendar, (v) => v + 1),
         'next-year'
       );
     },
@@ -342,7 +350,7 @@ export default {
       }
       const index = target.getAttribute('data-row-col');
       if (index) {
-        const [row, col] = index.split(',').map(v => parseInt(v, 10));
+        const [row, col] = index.split(',').map((v) => parseInt(v, 10));
         const date = this.dates[row][col];
         this.$emit('select', new Date(date));
       }
@@ -357,12 +365,6 @@ export default {
     getWeekNumber(date) {
       return this.getWeek(date, this.getLocale().formatLocale);
     },
-    handleId(row, col) {
-      if (this.range) {
-        return `range-date-${this.rangeIndex}-cell-${row}-${col}`;
-      }
-      return undefined;
-    },
     handleRefName(cellDate, row, col) {
       if (!this.isDisabled(cellDate)) {
         if (this.range) {
@@ -372,44 +374,15 @@ export default {
       }
       return undefined;
     },
+    handleId(row, col) {
+      if (this.range) {
+        return `range-date-${this.rangeIndex}-cell-${row}-${col}`;
+      }
+      return undefined;
+    },
     handleTabIndex(cellDate) {
       const response = this.isDisabled(cellDate);
       return response ? -1 : 0;
-    },
-    handleLeftNextRange() {
-      let index = 0;
-      if (this.rangeIndex === 0) {
-        this.handleIconLeftClick();
-      } else {
-        index = this.rangeIndex - 1;
-      }
-      const lastRow = this.dates[this.dates.length - 1];
-      const cellName = `#range-date-${index}-cell-${this.dates.length - 1}-${lastRow.length - 1}`;
-      const cellElement = document.querySelector(cellName);
-      if (cellElement) {
-        cellElement.focus();
-      }
-    },
-    handleRightNextRange() {
-      let index = 0;
-      if (this.rangeIndex === 0) {
-        index = this.rangeIndex + 1;
-      } else {
-        index = this.rangeIndex - 1;
-        this.handleIconRightClick();
-      }
-      const cellName = `#range-date-${index}-cell-0-0`;
-      const cellElement = document.querySelector(cellName);
-      if (cellElement) {
-        cellElement.focus();
-      }
-    },
-    focusNextElement(cell, row, column) {
-      const refName = this.handleRefName(cell, row, column);
-      const ref = this.$refs[refName];
-      if (ref && ref.length > 0) {
-        ref[0].focus();
-      }
     },
   },
 };

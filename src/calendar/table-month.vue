@@ -1,5 +1,8 @@
 <template>
-  <div :class="`${prefixClass}-calendar ${prefixClass}-calendar-panel-month`">
+  <div
+    :class="`${prefixClass}-calendar ${prefixClass}-calendar-panel-month`"
+    @keydown.esc="handleEsc"
+  >
     <div :class="`${prefixClass}-calendar-header`">
       <icon-button
         type="double-left"
@@ -40,11 +43,12 @@
             :tabindex="handleTabIndex(cell)"
             :data-month="cell.month"
             :class="getCellClasses(cell.month)"
+            @keydown.up.prevent="handleArrowUp(cell, i, j)"
             @keydown.down.prevent="handleArrowDown(cell, i, j)"
             @keydown.left.prevent="handleArrowLeft(cell, i, j)"
             @keydown.right.prevent="handleArrowRight(cell, i, j)"
-            @keydown.tab.prevent.stop
-            @keydown.up.prevent="handleArrowUp(cell, i, j)"
+            @keydown.tab="handleTab(cell, i, j)"
+            @keydown.enter="handleEnter"
           >
             <div>{{ cell.text }}</div>
           </td>
@@ -56,7 +60,7 @@
 
 <script>
 import { chunk } from '../util/base';
-import IconButton from './icon-button';
+import IconButton from './icon-button.vue';
 import { getLocale } from '../locale';
 import { createDate, setYear } from '../util/date';
 
@@ -94,16 +98,13 @@ export default {
       return this.calendar.getFullYear();
     },
     months() {
-      const locale = this.getLocale();
+      const { locale } = this;
       const monthsLocale = locale.months || locale.formatLocale.monthsShort;
       const months = monthsLocale.map((text, month) => {
         return { text, month };
       });
       return chunk(months, 3);
     },
-    /*
-      Add locale to be used on the template
-    */
     locale() {
       return this.getLocale();
     },
@@ -130,41 +131,49 @@ export default {
       }
       return this.disabledCalendarChanger(date, type);
     },
-    /* 
-      Allow the user to navigate with arrow up on the keydown event
-    */
+    handleTab(cell, row, column) {
+      const currentRefName = this.handleRefName(cell, row, column);
+      const lastRef = this.refsArray[this.refsArray.length - 1];
+
+      if (currentRefName === lastRef[0]) {
+        this.$emit('tableclose');
+      }
+    },
+    handleEnter(evt) {
+      this.handleClick(evt);
+    },
+    handleEsc() {
+      this.$emit('tableclose');
+    },
     handleArrowUp(cell, row, column) {
-      if (row > 0) {
-        this.focusNextElement(cell, row - 1, column);
+      if (row === 0) {
+        return;
+      }
+      const refName = this.handleRefName(cell, row - 1, column);
+      const ref = this.$refs[refName]?.[0];
+      if (ref) {
+        ref.focus();
       }
     },
-    /* 
-      Allow the user to navigate with arrow down on the keydown event
-    */
     handleArrowDown(cell, row, column) {
-      if (row >= this.months.length - 1) {
-        const footer = document.querySelector(`.${this.prefixClass}-datepicker-footer`);
-        if (footer) {
-          const elements = footer.querySelectorAll('button, [href], input, select, textarea');
-          const firstElement = Array.from(elements).find(
-            el => !el.disabled && !el.hidden && el.tabIndex !== -1
-          );
-          if (firstElement) {
-            firstElement.focus();
-          }
-        }
-      } else {
-        this.focusNextElement(cell, row + 1, column);
+      if (row === this.months.length - 1) {
+        return;
+      }
+      const refName = this.handleRefName(cell, row + 1, column);
+      const ref = this.$refs[refName]?.[0];
+      if (ref) {
+        ref.focus();
       }
     },
-    /* 
-      Allow the user to navigate with arrow left on the keydown event
-    */
     handleArrowLeft(cell, row, column) {
       const currentRefName = this.handleRefName(cell, row, column);
       const firstRef = this.refsArray[0];
       if (currentRefName !== firstRef[0]) {
-        this.focusNextElement(cell, row, column - 1);
+        const refName = this.handleRefName(cell, row, column - 1);
+        const ref = this.$refs[refName]?.[0];
+        if (ref) {
+          ref.focus();
+        }
       } else {
         this.handleIconDoubleLeftClick();
         const lastRef = this.refsArray[this.refsArray.length - 1];
@@ -176,14 +185,15 @@ export default {
         }
       }
     },
-    /* 
-      Allow the user to navigate with arrow right on the keydown event
-    */
     handleArrowRight(cell, row, column) {
       const currentRefName = this.handleRefName(cell, row, column);
       const lastRef = this.refsArray[this.refsArray.length - 1];
       if (currentRefName !== lastRef[0]) {
-        this.focusNextElement(cell, row, column + 1);
+        const refName = this.handleRefName(cell, row, column + 1);
+        const ref = this.$refs[refName]?.[0];
+        if (ref) {
+          ref.focus();
+        }
       } else {
         this.handleIconDoubleRightClick();
         const firstRef = this.refsArray[0];
@@ -198,14 +208,14 @@ export default {
     handleIconDoubleLeftClick() {
       this.$emit(
         'changecalendar',
-        setYear(this.calendar, v => v - 1),
+        setYear(this.calendar, (v) => v - 1),
         'last-year'
       );
     },
     handleIconDoubleRightClick() {
       this.$emit(
         'changecalendar',
-        setYear(this.calendar, v => v + 1),
+        setYear(this.calendar, (v) => v + 1),
         'next-year'
       );
     },
@@ -225,20 +235,13 @@ export default {
     handleRefName(cellDate, row, col) {
       const date = createDate(cellDate, 0);
       if (!this.isDisabled(date)) {
-        return `month-cell-${row}-${col}`;
+        return `year-cell-${row}-${col}`;
       }
       return undefined;
     },
     handleTabIndex(cellDate) {
       const date = createDate(cellDate, 0);
       return this.isDisabled(date) ? -1 : 0;
-    },
-    focusNextElement(cell, row, column) {
-      const refName = this.handleRefName(cell, row, column);
-      const ref = this.$refs[refName];
-      if (ref && ref.length > 0) {
-        ref[0].focus();
-      }
     },
   },
 };

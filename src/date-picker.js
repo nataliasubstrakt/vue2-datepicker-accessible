@@ -2,13 +2,13 @@ import { parse, format, getWeek } from 'date-format-parse';
 import { isValidDate, isValidRangeDate, isValidDates } from './util/date';
 import { pick, isObject, mergeDeep } from './util/base';
 import { getLocale } from './locale';
-import Popup from './popup';
-import IconCalendar from './icon/icon-calendar';
-import IconTime from './icon/icon-time';
-import IconClose from './icon/icon-close';
+import Popup from './popup.vue';
+import IconCalendar from './icon/icon-calendar.vue';
+import IconTime from './icon/icon-time.vue';
+import IconClose from './icon/icon-close.vue';
 import CalendarPanel from './calendar/calendar-panel';
 import CalendarRange from './calendar/calendar-range';
-import TimePanel from './time/time-panel';
+import TimePanel from './time/time-panel.vue';
 import TimeRange from './time/time-range';
 import DatetimePanel from './datetime/datetime-panel';
 import DatetimeRange from './datetime/datetime-range';
@@ -125,7 +125,7 @@ export default {
         return (
           Array.isArray(value) &&
           value.every(
-            v => isObject(v) && typeof v.text === 'string' && typeof v.onClick === 'function'
+            (v) => isObject(v) && typeof v.text === 'string' && typeof v.onClick === 'function'
           )
         );
       },
@@ -184,7 +184,7 @@ export default {
         return '';
       }
       if (Array.isArray(this.innerValue)) {
-        return this.innerValue.map(v => this.formatDate(v)).join(this.innerRangeSeparator);
+        return this.innerValue.map((v) => this.formatDate(v)).join(this.innerRangeSeparator);
       }
       return this.formatDate(this.innerValue);
     },
@@ -322,11 +322,11 @@ export default {
       if (!Array.isArray(value)) {
         value = [value];
       }
-      return value.every(v => !disabledDate(v) && !disabledTime(v));
+      return value.every((v) => !disabledDate(v) && !disabledTime(v));
     },
     handleMultipleDates(date, dates) {
       if (this.validMultipleType && dates) {
-        const nextDates = dates.filter(v => v.getTime() !== date.getTime());
+        const nextDates = dates.filter((v) => v.getTime() !== date.getTime());
         if (nextDates.length === dates.length) {
           nextDates.push(date);
         }
@@ -404,7 +404,7 @@ export default {
       }
       let date;
       if (this.validMultipleType) {
-        date = text.split(this.innerRangeSeparator).map(v => this.parseDate(v.trim()));
+        date = text.split(this.innerRangeSeparator).map((v) => this.parseDate(v.trim()));
       } else if (this.range) {
         let arr = text.split(this.innerRangeSeparator);
         if (arr.length !== 2) {
@@ -412,7 +412,7 @@ export default {
           // eg: 2019-10-09-2020-01-02
           arr = text.split(this.innerRangeSeparator.trim());
         }
-        date = arr.map(v => this.parseDate(v.trim()));
+        date = arr.map((v) => this.parseDate(v.trim()));
       } else {
         date = this.parseDate(text);
       }
@@ -433,7 +433,11 @@ export default {
       if (keyCode === 9 || keyCode === 27) {
         this.closePopup();
       } else if (keyCode === 13) {
-        this.handleInputChange();
+        if (!this.editable || this.userInput === null) {
+          this.openPopup();
+        } else {
+          this.handleInputChange();
+        }
       } else if (keyCode === 40) {
         this.handleInputFocus();
       }
@@ -524,6 +528,7 @@ export default {
       const on = {
         ...pick(this.$listeners, Component.emits || []),
         select: this.handleSelectDate,
+        closecalendar: this.closePopup,
       };
       const content = <Component {...{ props, on, ref: 'picker' }} />;
       return (
