@@ -1,12 +1,10 @@
 <template>
-  <scrollbar-vertical role="menu">
+  <scrollbar-vertical>
     <div
       v-for="item in list"
       :key="item.value"
-      role="menuitem"
-      :tabindex="isDisabled(item.value) ? '-1' : '0'"
-      :disabled="isDisabled(item.value)"
       :class="[`${prefixClass}-time-option`, getClasses(item.value)]"
+      :tabindex="isDisabled(item.value) ? '-1' : '0'"
       @click="handleSelect(item.value)"
       @keydown.enter="handleSelect(item.value)"
     >
@@ -17,7 +15,7 @@
 
 <script>
 import { format } from 'date-format-parse';
-import ScrollbarVertical from '../scrollbar/scrollbar-vertical';
+import ScrollbarVertical from '../scrollbar/scrollbar-vertical.vue';
 import { getScrollParent } from '../util/dom';
 import { getLocale } from '../locale';
 

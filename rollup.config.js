@@ -10,10 +10,10 @@ const external = Object.keys(pkg.dependencies);
 const input = 'src/index.js';
 
 const plugins = [
-  vue(),
   resolve({
     extensions: ['.js', '.vue', '.jsx', '.json'],
   }),
+  vue(),
   babel({
     runtimeHelpers: true,
     extensions: ['.js', '.jsx', '.es6', '.es', '.mjs', '.vue'],

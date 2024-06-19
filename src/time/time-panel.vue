@@ -42,8 +42,8 @@
 <script>
 import { format } from 'date-format-parse';
 import { getValidDate } from '../util/date';
-import ListColumns from './list-columns';
-import ListOptions from './list-options';
+import ListColumns from './list-columns.vue';
+import ListOptions from './list-options.vue';
 import { getLocale } from '../locale';
 
 export default {
@@ -146,7 +146,7 @@ export default {
         use12h: /a/i.test(fmt),
       };
       const obj = {};
-      Object.keys(defaultProps).forEach(key => {
+      Object.keys(defaultProps).forEach((key) => {
         obj[key] = typeof this[key] === 'boolean' ? this[key] : defaultProps[key];
       });
       return obj;
